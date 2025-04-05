@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRF Pilot Program</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+  <div class="container mx-auto p-6">
+    <header class="text-center mb-10">
+      <h1 class="text-4xl font-bold mb-2">CRF Pilot Program</h1>
+      <p class="text-lg">Join our innovative training initiative for IMGs in the US healthcare system.</p>
+    </header>
+
+    <section class="bg-white shadow-md rounded-lg p-6 mb-10">
+      <h2 class="text-2xl font-semibold mb-4">Program Overview</h2>
+      <p class="mb-4">The Clinical Research Fellowship (CRF) Pilot Program is a remote, part-time research and training initiative designed for International Medical Graduates (IMGs) with an interest in geriatrics and long-term care. Our aim is to provide academic exposure and mentorship to help you become competitive applicants in the US healthcare workforce.</p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li>Remote and part-time commitment</li>
+        <li>Focus on long-term care, telemedicine, and geriatrics</li>
+        <li>Training in research, quality improvement, and US healthcare systems</li>
+      </ul>
+    </section>
+
+    <section class="bg-white shadow-md rounded-lg p-6 mb-10">
+      <h2 class="text-2xl font-semibold mb-4">Who Should Apply?</h2>
+      <p class="mb-4">We welcome applications from:</p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li>International medical graduates (IMGs)</li>
+        <li>Recent residency applicants and unmatched graduates</li>
+        <li>IMGs with a strong interest in geriatrics and telehealth</li>
+      </ul>
+    </section>
+
+    <section class="bg-white shadow-md rounded-lg p-6 mb-10">
+      <h2 class="text-2xl font-semibold mb-4">Express Interest</h2>
+      <form id="interest-form" class="space-y-4">
+        <input type="text" name="name" placeholder="Your Name" required class="w-full p-2 border rounded" />
+        <input type="email" name="email" placeholder="Your Email" required class="w-full p-2 border rounded" />
+        <input type="text" name="organization" placeholder="Organization" class="w-full p-2 border rounded" />
+        <textarea name="message" placeholder="Message" rows="4" class="w-full p-2 border rounded"></textarea>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+      </form>
+      <div id="form-status" class="mt-4 text-sm text-green-600"></div>
+    </section>
+
+    <footer class="text-center text-sm text-gray-500">
+      &copy; 2025 CRF Program. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('interest-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = {
+        name: form.name.value,
+        email: form.email.value,
+        organization: form.organization.value,
+        message: form.message.value
+      };
+
+      fetch('YOUR_GOOGLE_WEBAPP_URL', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('form-status').textContent = 'Thanks! Your response has been recorded.';
+        form.reset();
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('form-status').textContent = 'Oops! Something went wrong.';
+      });
+    });
+  </script>
+</body>
+
+</html>
