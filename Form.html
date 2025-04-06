@@ -2,22 +2,30 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CRF Pilot Program</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900">
   <div class="container mx-auto p-6">
+    <!-- Header -->
     <header class="text-center mb-10">
       <h1 class="text-4xl font-bold mb-2">CRF Pilot Program</h1>
       <p class="text-lg">Join our innovative training initiative for IMGs in the US healthcare system.</p>
     </header>
 
+    <!-- Program Overview -->
     <section class="bg-white shadow-md rounded-lg p-6 mb-10">
       <h2 class="text-2xl font-semibold mb-4">Program Overview</h2>
-      <p class="mb-4">The Clinical Research Fellowship (CRF) Pilot Program is a remote, part-time research and training initiative designed for International Medical Graduates (IMGs) with an interest in geriatrics and long-term care. Our aim is to provide academic exposure and mentorship to help you become competitive applicants in the US healthcare workforce.</p>
+      <p class="mb-4">The Clinical Research Fellowship (CRF) Pilot Program is a remote, part-time research and training
+        initiative designed for International Medical Graduates (IMGs) with an interest in geriatrics and long-term care.</p>
       <ul class="list-disc pl-5 space-y-2">
         <li>Remote and part-time commitment</li>
         <li>Focus on long-term care, telemedicine, and geriatrics</li>
@@ -25,6 +33,7 @@
       </ul>
     </section>
 
+    <!-- Who Should Apply -->
     <section class="bg-white shadow-md rounded-lg p-6 mb-10">
       <h2 class="text-2xl font-semibold mb-4">Who Should Apply?</h2>
       <p class="mb-4">We welcome applications from:</p>
@@ -35,6 +44,7 @@
       </ul>
     </section>
 
+    <!-- Express Interest Form -->
     <section class="bg-white shadow-md rounded-lg p-6 mb-10">
       <h2 class="text-2xl font-semibold mb-4">Express Interest</h2>
       <form id="interest-form" class="space-y-4">
@@ -44,42 +54,52 @@
         <textarea name="message" placeholder="Message" rows="4" class="w-full p-2 border rounded"></textarea>
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
       </form>
-      <div id="form-status" class="mt-4 text-sm text-green-600"></div>
+      <div id="form-status" class="mt-4 text-sm hidden"></div>
     </section>
 
+    <!-- Footer -->
     <footer class="text-center text-sm text-gray-500">
       &copy; 2025 CRF Program. All rights reserved.
     </footer>
   </div>
 
-  <script>
-    document.getElementById('interest-form').addEventListener('submit', function (e) {
-      e.preventDefault();
+  <!-- Script -->
+  <script defer>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxbvdabWEjYvsoc6GvptcedA5bpHRE9ZBcP_oaqRm97mu5PAsXeB7RRc020t-zjQRC5/exec';
 
-      const form = e.target;
-      const formData = {
-        name: form.name.value,
-        email: form.email.value,
-        organization: form.organization.value,
-        message: form.message.value
-      };
-// 1x004Uch4Gg0-gYwVviB-A_8ZCbtmJvvTgmqRMNRds7Y
-      
-      fetch('https://script.google.com/macros/s/AKfycbxbvdabWEjYvsoc6GvptcedA5bpHRE9ZBcP_oaqRm97mu5PAsXeB7RRc020t-zjQRC5/exec', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('form-status').textContent = 'Thanks! Your response has been recorded.';
-        form.reset();
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById('form-status').textContent = 'Oops! Something went wrong.';
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById('interest-form');
+      const status = document.getElementById('form-status');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = {
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          organization: form.organization.value.trim(),
+          message: form.message.value.trim()
+        };
+
+        fetch(scriptURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          form.reset();
+          status.textContent = "✅ Thanks! Your response has been recorded.";
+          status.classList.remove('hidden', 'text-red-600');
+          status.classList.add('text-green-600');
+        })
+        .catch(error => {
+          console.error('Error!', error.message);
+          status.textContent = "⚠️ Oops! Something went wrong. Please try again.";
+          status.classList.remove('hidden', 'text-green-600');
+          status.classList.add('text-red-600');
+        });
       });
     });
   </script>
