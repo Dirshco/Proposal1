@@ -32,30 +32,34 @@
         h1 {
             margin: 0;
             font-size: 2.2rem;
+            color: var(--light);
         }
         h2 {
-            color: var(--primary);
-            border-bottom: 2px solid var(--secondary);
+            color: var(--text);
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 0.5rem;
             margin-top: 2rem;
         }
         h3 {
-            color: var(--primary);
+            color: var(--text);
         }
         .subtitle {
             font-style: italic;
             margin-top: 0.5rem;
+            color: var(--light);
         }
         .proposal-section {
-            background-color: var(--secondary);
+            background-color: var(--light);
             padding: 1.5rem;
             border-radius: 8px;
             margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
+            color: var(--text);
         }
         th, td {
             padding: 12px;
@@ -74,12 +78,14 @@
             border-left: 4px solid var(--accent);
             padding: 1rem;
             margin: 1.5rem 0;
+            color: var(--text);
         }
         .comment-form {
-            background-color: #f9f9f9;
+            background-color: var(--light);
             padding: 2rem;
             border-radius: 8px;
             margin-top: 3rem;
+            border: 1px solid #ddd;
         }
         .form-group {
             margin-bottom: 1.5rem;
@@ -88,6 +94,7 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
+            color: var(--text);
         }
         input[type="text"],
         input[type="email"],
@@ -98,6 +105,7 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-family: inherit;
+            color: var(--text);
         }
         textarea {
             min-height: 150px;
@@ -119,8 +127,9 @@
             text-align: center;
             margin-top: 3rem;
             padding: 1rem;
-            color: #666;
+            color: var(--text);
             font-size: 0.9rem;
+            border-top: 1px solid #ddd;
         }
         .download-btn {
             display: inline-block;
@@ -137,7 +146,7 @@
         }
         .faq-question {
             font-weight: 600;
-            color: var(--primary);
+            color: var(--text);
             cursor: pointer;
             padding: 0.5rem 0;
             border-bottom: 1px solid #eee;
@@ -147,6 +156,7 @@
             background-color: #f9f9f9;
             border-radius: 4px;
             margin-top: 0.5rem;
+            color: var(--text);
         }
         /* Timeline Styles */
         .timeline {
@@ -198,6 +208,7 @@
             background-color: var(--light);
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: var(--text);
         }
         /* Map Styles */
         #pilotLocationsMap {
@@ -247,8 +258,8 @@
                 <li>Funded through existing resources (nursing home fines)</li>
             </ul>
         </div>
-        <!-- onclick="window.print()" -->
-        <a href="#" class="download-btn" onclick="window.print(); return false;>Download Full Proposal (PDF)</a>
+        
+        <a href="#" class="download-btn" onclick="window.print(); return false;">Download Full Proposal (PDF)</a>
     </div>
 
     <div class="proposal-section">
@@ -491,7 +502,7 @@
     </div>
 
     <footer>
-        <p><b>Appreviations</b><br>LARA: Michigan Department of Licensing and Regulatory Affairs  <br>
+        <p><b>Abbreviations</b><br>LARA: Michigan Department of Licensing and Regulatory Affairs<br>
 NHs: Nursing Homes<br>IMGs: International medical graduates</p>
         <p>For official inquiries, please contact: <a href="mailto:nadir.md@gmail.com">nadir.md@gmail.com</a></p>
         <p>Last updated: April 2025</p>
