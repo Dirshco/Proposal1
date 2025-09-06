@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michigan Nursing Home IMG Training Initiative</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #005b96;
+            --secondary: #e1f0f7;
+            --accent: #ff7b25;
+            --text: #000000;
+            --light: #cffccf;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            color: var(--light);
+        }
+        h2 {
+            color: var(--text);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+        h3 {
+            color: var(--text);
+        }
+        .subtitle {
+            font-style: italic;
+            margin-top: 0.5rem;
+            color: var(--light);
+        }
+        .proposal-section {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            color: var(--text);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: var(--primary);
+            color: var(--light);
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .highlight-box {
+            background-color: var(--light);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            color: var(--text);
+        }
+        .comment-form {
+            background-color: var(--light);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 3rem;
+            border: 1px solid #ddd;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            color: var(--text);
+        }
+        textarea {
+            min-height: 150px;
+        }
+        button {
+            background-color: var(--accent);
+            color: var(--light);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e56a1a;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            color: var(--text);
+            font-size: 0.9rem;
+            border-top: 1px solid #ddd;
+        }
+        .download-btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        /* FAQ Styles */
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+        .faq-question {
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .faq-answer {
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            color: var(--text);
+        }
+        /* Timeline Styles */
+        .timeline {
+            position: relative;
+            max-width: 100%;
+            margin: 2rem 0;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--light);
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        .left {
+            left: 0;
+        }
+        .right {
+            left: 50%;
+        }
+        .left::after {
+            right: -12px;
+        }
+        .right::after {
+            left: -12px;
+        }
+        .timeline-content {
+            padding: 20px;
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: var(--text);
+        }
+        /* Map Styles */
+        #pilotLocationsMap {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid #ddd;
+        }
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item::after {
+                left: 21px;
+            }
+            .left::after, .right::after {
+                left: 21px;
+            }
+            .right {
+                left: 0%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Michigan Nursing Home IMG Clinical Training Initiative</h1>
+        <p class="subtitle">A State-Approved Program to Enhance Resident Care While Training International Medical Graduates</p>
+    </header>
+
+    <div class="proposal-section">
+        <h2>Program Overview</h2>
+        <p>This initiative proposes using a portion of Michigan's nursing home regulatory fines to fund a supervised clinical training program for qualified International Medical Graduates (IMGs) in Post-Acute and Long-Term Care (PALTC) settings.</p>
+        
+        <div class="highlight-box">
+            <strong>Key Benefits:</strong>
+            <ul>
+                <li>Improves nursing home care through additional clinical support</li>
+                <li>Provides U.S. clinical experience for IMGs pursuing medical licensure</li>
+                <li>Creates a pipeline of skilled geriatric care providers</li>
+                <li>Funded through existing resources (nursing home fines)</li>
+            </ul>
+        </div>
+        
+        <a href="#" class="download-btn" onclick="window.print(); return false;">Download Full Proposal (PDF)</a>
+    </div>
+
+    <div class="proposal-section">
+        <h2>Participant Eligibility</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Criteria</th>
+                    <th>Details</th>
+                    <th>Verification</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Clinical Experience</strong></td>
+                    <td>Minimum 2 years in clinical medicine in the US or overseas</td>
+                    <td>Medical school transcripts, employment records</td>
+                </tr>
+                <tr>
+                    <td><strong>Immigration Status</strong></td>
+                    <td>U.S. citizenship, permanent residency, or valid work visa</td>
+                    <td>USCIS documentation</td>
+                </tr>
+                <tr>
+                    <td><strong>Examinations</strong></td>
+                    <td>Passed USMLE Steps 1 & 2 CK/CS</td>
+                    <td>ECFMG certification</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="proposal-section">
+        <h2>Training Curriculum</h2>
+        <h3>Orientation Phase (4 Weeks)</h3>
+        <ul>
+            <li><strong>Clinical Skills:</strong> Geriatric assessment tools, polypharmacy management, dementia care</li>
+            <li><strong>Regulatory Compliance:</strong> OBRA '87 requirements, Michigan nursing home laws</li>
+            <li><strong>Technology Training:</strong> PointClickCare EMR certification, telehealth platforms</li>
+        </ul>
+        
+        <h3>Clinical Rotation (12 Months)</h3>
+        <ul>
+            <li>Direct patient care under licensed physicians</li>
+            <li>Weekly didactic sessions on PALTC topics</li>
+            <li>Quarterly competency evaluations</li>
+        </ul>
+    </div>
+
+    <div class="proposal-section">
+        <h2>Financial Plan</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Expense Category</th>
+                    <th>Annual Cost</th>
+                    <th>Funding Source</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>IMG Stipends</td>
+                    <td>$1,250,000</td>
+                    <td>Nursing home fines (15%)</td>
+                </tr>
+                <tr>
+                    <td>Physician Supervision</td>
+                    <td>$450,000</td>
+                    <td>State workforce development funds</td>
+                </tr>
+                <tr>
+                    <td>Training Materials</td>
+                    <td>$75,000</td>
+                    <td>Federal geriatric education grants</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong>$2,000,000</strong></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="proposal-section">
+        <h2>Implementation Timeline</h2>
+        <div class="timeline">
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>Phase 1: Planning</h3>
+                    <p><strong>Months 1-3</strong></p>
+                    <ul>
+                        <li>Finalize curriculum</li>
+                        <li>Secure funding approvals</li>
+                        <li>Establish oversight committee</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>Phase 2: Recruitment</h3>
+                    <p><strong>Months 4-6</strong></p>
+                    <ul>
+                        <li>Select 30 qualified IMGs</li>
+                        <li>Recruit 10 supervising physicians</li>
+                        <li>Finalize nursing home partnerships</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item left">
+                <div class="timeline-content">
+                    <h3>Phase 3: Pilot Launch</h3>
+                    <p><strong>Month 7</strong></p>
+                    <ul>
+                        <li>Begin 4-week orientation</li>
+                        <li>Start rotations at 5 facilities</li>
+                        <li>Initiate data collection</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item right">
+                <div class="timeline-content">
+                    <h3>Phase 4: Full Implementation</h3>
+                    <p><strong>Year 2</strong></p>
+                    <ul>
+                        <li>Expand to 20 nursing homes</li>
+                        <li>Statewide rollout</li>
+                        <li>Annual program evaluation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="proposal-section">
+        <h2>Proposed Pilot Locations</h2>
+        <div id="pilotLocationsMap"></div>
+        <p>The pilot program will launch in these five regions with the highest need for nursing home staffing support:</p>
+        <ul>
+            <li><strong>Detroit Metro Area</strong> - 2 facilities</li>
+            <li><strong>Grand Rapids</strong> - 1 facility</li>
+            <li><strong>Flint/Saginaw</strong> - 1 facility</li>
+            <li><strong>Upper Peninsula</strong> (Marquette) - 1 facility</li>
+        </ul>
+    </div>
+
+    <div class="proposal-section">
+        <h2>Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question">1. How will IMGs be supervised in nursing homes?</div>
+            <div class="faq-answer">
+                <p>All IMGs will work under direct supervision of licensed Michigan physicians for the first 90 days, with a maximum 1:2 supervisor-to-IMG ratio. After this period, telehealth supervision may be permitted for certain tasks under LARA guidelines.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">2. What patient care activities will IMGs be allowed to perform?</div>
+            <div class="faq-answer">
+                <p>IMGs will be permitted to:</p>
+                <ul>
+                    <li>Conduct patient interviews and document histories</li>
+                    <li>Perform physical examinations under supervision</li>
+                    <li>Participate in care plan meetings</li>
+                    <li>Assist with medication reconciliation</li>
+                </ul>
+                <p>They will <strong>not</strong> be permitted to prescribe medications or make independent treatment decisions.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">3. How will program success be measured?</div>
+            <div class="faq-answer">
+                <p>Key performance indicators include:</p>
+                <ul>
+                    <li>30-day hospital readmission rates</li>
+                    <li>Staffing ratio improvements</li>
+                    <li>Resident and family satisfaction scores</li>
+                    <li>IMG match rates into residency programs</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">4. What happens if a nursing home doesn't see improvements?</div>
+            <div class="faq-answer">
+                <p>Facilities showing no improvement after 6 months will undergo a comprehensive review by LARA. The program may be modified or discontinued at underperforming sites, with resources reallocated to more successful locations.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">5. Can IMGs use this experience for residency applications?</div>
+            <div class="faq-answer">
+                <p>Yes. Participants will receive formal documentation of their clinical hours and competencies that can be included in ERAS applications. The program will also provide letters of recommendation from supervising physicians.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-form">
+        <h2>Provide Your Feedback</h2>
+        <p>As a Michigan physician, your input is valuable to help shape this initiative. Please share your suggestions or concerns below.</p>
+        <!-- /*
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="affiliation">Professional Affiliation:</label>
+                <select id="affiliation" name="affiliation">
+                    <option value="">Select...</option>
+                    <option value="nursing_home">Nursing Home Physician</option>
+                    <option value="hospital">Hospital-Based Physician</option>
+                    <option value="academic">Academic Physician</option>
+                    <option value="resident">Resident Physician</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="comments">Your Suggestions/Comments:</label>
+                <textarea id="comments" name="comments" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="contact_me" checked>
+                    I'm willing to be contacted about my feedback
+                </label>
+            </div>
+            
+            <button type="submit">Submit Feedback</button>
+        </form>
+        */ -->
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScf7UmxIQInaV4gHEzZEOG-yFMMh1PED2XxXBB5A_jpKsmg6g/viewform?embedded=true" width="640" height="779" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </form>
+    </div>
+
+    <footer>
+        <p><b>Abbreviations</b><br>LARA: Michigan Department of Licensing and Regulatory Affairs<br>
+NHs: Nursing Homes<br>IMGs: International medical graduates</p>
+        <p>For official inquiries, please contact: <a href="mailto:nadir.md@gmail.com">nadir.md@gmail.com</a></p>
+        <p>Last updated: April 2025</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Form Handling
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your feedback! Your comments have been submitted for review.');
+            this.reset();
+        });
+
+        // Map Implementation
+        const map = L.map('pilotLocationsMap').setView([44.3148, -85.6024], 6);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Pilot location markers
+        const locations = [
+            {
+                name: "Detroit Metro Area",
+                coords: [42.3314, -83.0458],
+                details: "2 pilot facilities"
+            },
+            {
+                name: "Grand Rapids",
+                coords: [42.9634, -85.6681],
+                details: "1 pilot facility"
+            },
+            {
+                name: "Flint/Saginaw",
+                coords: [43.0125, -83.6875],
+                details: "1 pilot facility"
+            },
+            {
+                name: "Upper Peninsula (Marquette)",
+                coords: [46.5435, -87.3954],
+                details: "1 pilot facility"
+            }
+        ];
+
+        locations.forEach(location => {
+            L.marker(location.coords)
+                .addTo(map)
+                .bindPopup(`<b>${location.name}</b><br>${location.details}`);
+        });
+
+        // FAQ Toggle Functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    </script>
+</body>
+</html>
